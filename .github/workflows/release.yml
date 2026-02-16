@@ -74,8 +74,8 @@ jobs:
         with:
           command: build
           target: ${{ matrix.target }}
-          manylinux: auto
-          before-script-linux: ${{ matrix.target == 'x86_64' && 'yum install -y perl-IPC-Cmd' || 'true' }}
+          manylinux: manylinux_2_28
+          before-script-linux: export OPENSSL_NO_VENDOR=1
           args: --release -o dist --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v4
