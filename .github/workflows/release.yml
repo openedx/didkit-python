@@ -71,12 +71,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Build Wheels
         uses: PyO3/maturin-action@v1
-        env:
-          OPENSSL_NO_VENDOR: 1
         with:
           command: build
           target: ${{ matrix.target }}
           manylinux: auto
+          before-script-linux: yum install -y perl-IPC-Cmd
           args: --release -o dist --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v4
