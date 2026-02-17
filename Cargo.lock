@@ -1275,7 +1275,7 @@ dependencies = [
 
 [[package]]
 name = "didkit"
-version = "0.3.4"
+version = "0.3.4-alpha"
 dependencies = [
  "didkit 0.6.0",
  "pyo3",
