@@ -122,6 +122,9 @@ jobs:
           command: build
           target: aarch64
           manylinux: manylinux_2_28
+          before-script-linux: |
+            yum install -y openssl-devel
+            export OPENSSL_NO_VENDOR=1
           args: --release -o dist --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v4
