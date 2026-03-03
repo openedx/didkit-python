@@ -1,6 +1,6 @@
 [package]
 name = "didkit"
-version = "0.3.4-alpha.2"
+version = "0.3.4-alpha.3"
 authors = ["Spruce Systems, Inc."]
 edition = "2018"
 description = "Library for Verifiable Credentials and Decentralized Identifiers."
