@@ -39,6 +39,7 @@ jobs:
           name: macos-wheels-${{ matrix.python-version }}-${{matrix.target}}
           path: dist
           retention-days: 3
+          compression-level: 0
 
   windows:
     runs-on: windows-latest
@@ -67,6 +68,7 @@ jobs:
           name: windows-wheels-${{ matrix.python-version }}-${{ matrix.target }}
           path: dist
           retention-days: 3
+          compression-level: 0
 
   linux:
     runs-on: ubuntu-latest
@@ -101,6 +103,7 @@ jobs:
           name: linux-wheels-${{ matrix.python-version }}-${{ matrix.target }}
           path: dist
           retention-days: 3
+          compression-level: 0
 
   # TODO Add pypy
 
