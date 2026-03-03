@@ -16,17 +16,12 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
         target: [x64, aarch64]
     steps:
       - uses: actions/checkout@v4
       - uses: Swatinem/rust-cache@v2
         with:
           key: ${{ matrix.target }}
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -36,54 +31,39 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: macos-wheels-${{ matrix.python-version }}-${{matrix.target}}
+          name: macos-wheels-${{ matrix.target }}
           path: dist
           retention-days: 3
           compression-level: 0
 
   windows:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
-        target: [x64]
     steps:
       - uses: actions/checkout@v4
       - uses: Swatinem/rust-cache@v2
         with:
-          key: ${{ matrix.target }}
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
+          key: x64
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           command: build
-          target: ${{ matrix.target }}
+          target: x64
           args: --release -o dist --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: windows-wheels-${{ matrix.python-version }}-${{ matrix.target }}
+          name: windows-wheels-x64
           path: dist
           retention-days: 3
           compression-level: 0
 
   linux-x86_64:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: Swatinem/rust-cache@v2
         with:
           key: x86_64
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
       - name: Build Wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -97,25 +77,18 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: linux-wheels-${{ matrix.python-version }}-x86_64
+          name: linux-wheels-x86_64
           path: dist
           retention-days: 3
           compression-level: 0
 
   linux-aarch64:
     runs-on: ubuntu-24.04-arm
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: Swatinem/rust-cache@v2
         with:
           key: aarch64
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
       - name: Build Wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -129,7 +102,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: linux-wheels-${{ matrix.python-version }}-aarch64
+          name: linux-wheels-aarch64
           path: dist
           retention-days: 3
           compression-level: 0
@@ -144,8 +117,13 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          pattern: '*'
-          merge-multiple: true
+          pattern: '*-wheels-*'
+          path: artifacts
+      - name: Collect wheels
+        run: |
+          mkdir -p dist
+          find artifacts -name '*.whl' -exec mv {} dist/ \;
+          ls -la dist/
       - uses: actions/setup-python@v5
         with:
           python-version: 3.12
@@ -155,5 +133,5 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_UPLOAD_TOKEN }}
         run: |
           pip install --upgrade twine
-          twine check *
-          twine upload --skip-existing --verbose *
+          twine check dist/*
+          twine upload --skip-existing --verbose dist/*
