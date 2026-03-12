@@ -1,6 +1,11 @@
 > [!IMPORTANT]
-> SpruceID does not use the DIDKit bindings internally anymore, and they decided to archive their respective repositories. Considering the Open edX project dependency on didkit-python bindings for the
-verifiable credentials support and requires VC 2.0 support, a decision was made to fork the solution, implement minor module updates and publish under the name openedx-didkit as a drop-in replacement for didkit PyPI package.
+> SpruceID does not use the DIDKit bindings internally anymore, and they decided to archive their 
+respective repositories. Considering the Open edX project dependency on didkit-python bindings for the
+verifiable credentials support and requires VC 2.0 support, a decision was made to fork the solution, 
+implement minor module updates and publish under the name openedx-didkit as a drop-in replacement for 
+didkit PyPI package.
+ 
+
 
 [![PyPI version](https://badge.fury.io/py/openedx-didkit.svg)](https://badge.fury.io/py/openedx-didkit)
 
@@ -56,3 +61,12 @@ poetry run maturin develop
 poetry run pytest
 ```
 
+## License
+
+This software:
+
+was forked from https://github.com/GlugovGrGlib/didkit-python,
+which was forked from https://github.com/spruceid/didkit-python,
+All contribution made to those repositories, the last of which is tagged final-external-contribution, are licensed by the original contributors under the terms of the Apache License 2.0 with one upstream dependency licensed GPLv3 (removed in the GlugovGrGlib fork).
+
+The software is now maintained for the purpose of the Open edX project by Axim Collaborative, Inc., which licenses any further contributions to this repository under the Apache License 2.0.
